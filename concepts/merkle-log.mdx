@@ -44,3 +44,24 @@ audit-path verification using `leaf_index`, `tree_size`, and the hashes in `incl
 part of the tree. An absent anchor is a limitation of the proof, not an invalid receipt. See
 [anchoring](/concepts/anchoring) for what it adds, and [check a receipt](/concepts/check-a-receipt) for running this
 verification yourself.
+
+## Read the log yourself
+
+The log is free and public: no account, no API key, and any website may call it from a browser. Reads are
+rate-limited per IP address.
+
+```bash
+# The signed tree head: current size and root, signed by QED Proof, plus the latest anchor on Base Sepolia (testnet)
+curl https://api.qedproof.site/v1/log/head
+
+# Prove an older tree is a prefix of a newer one: nothing was edited or dropped in between
+curl "https://api.qedproof.site/v1/log/consistency?first=100&second=120"
+
+# The newest entries (leaf index, leaf hash and time only, never receipt contents)
+curl https://api.qedproof.site/v1/log/entries
+```
+
+The tree head is signed under its own domain (`POAW-TREE-HEAD-V0`), so it can never be mistaken for a receipt.
+Keep the heads you fetch: a later head that isn't consistent with an earlier one is proof the log was rewritten.
+To check a receipt against a head you hold, run `check.py --head <file-or-url>`. The full endpoint list is in the
+[API reference](/api-reference/introduction), and [qedproof.site/log](https://qedproof.site/log/) shows the same data.

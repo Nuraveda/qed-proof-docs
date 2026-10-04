@@ -89,8 +89,20 @@
               "GET /v1/claims",
               "GET /v1/claims/{claim_id}",
               "GET /v1/connections",
+              "GET /v1/whoami",
               "GET /v1/receipts/{receipt_id}",
               "GET /.well-known/poaw-keys.json"
+            ]
+          },
+          {
+            "group": "Public log",
+            "openapi": "api-reference/openapi.json",
+            "pages": [
+              "GET /v1/log/head",
+              "GET /v1/log/consistency",
+              "GET /v1/log/proof",
+              "GET /v1/log/anchors",
+              "GET /v1/log/entries"
             ]
           }
         ]

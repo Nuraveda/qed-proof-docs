@@ -521,9 +521,387 @@
         "summary": "List connections"
       }
     },
+    "/v1/log/anchors": {
+      "get": {
+        "description": "Landed anchors of the log root on Base Sepolia (testnet), newest first, with EAS uid, transaction, block and time. Pass `next` as `before` for older ones. Free and public.",
+        "operationId": "log_anchors_v1_log_anchors_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "before",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Before"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Log Anchors V1 Log Anchors Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Invalid parameters."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Rate limit exceeded."
+          }
+        },
+        "summary": "List anchors"
+      }
+    },
+    "/v1/log/consistency": {
+      "get": {
+        "description": "Proves the tree of size `first` is a prefix of the tree of size `second` (RFC 6962 / 9162): every entry that was in the log is still there, unchanged. Free and public.",
+        "operationId": "log_consistency_v1_log_consistency_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "first",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "title": "First",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "second",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "title": "Second",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Log Consistency V1 Log Consistency Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Invalid sizes (`first` must be ≤ `second`)."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "`second` is beyond the current tree size."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Rate limit exceeded."
+          }
+        },
+        "summary": "Get a consistency proof"
+      }
+    },
+    "/v1/log/entries": {
+      "get": {
+        "description": "Entries of the log in order: leaf index, leaf hash and time only, never receipt ids or contents, so nobody's claims can be enumerated. A receipt holder proves their own entry with the receipt. Defaults to the newest 50; pass `start` for a range. Free and public.",
+        "operationId": "log_entries_v1_log_entries_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "start",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Start"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Log Entries V1 Log Entries Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Invalid parameters."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "`start` is beyond the current tree size."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Rate limit exceeded."
+          }
+        },
+        "summary": "List log entries"
+      }
+    },
+    "/v1/log/head": {
+      "get": {
+        "description": "The log's current size and root, signed by QED Proof's receipt key under its own domain (`POAW-TREE-HEAD-V0`, SPEC §8.5), plus the latest anchor on Base Sepolia (testnet) with its block. Free and public: no key, any site may call it from a browser. Compare heads over time with Get a consistency proof to confirm nothing was rewritten.",
+        "operationId": "log_head_v1_log_head_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Log Head V1 Log Head Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Rate limit exceeded."
+          }
+        },
+        "summary": "Get the signed tree head"
+      }
+    },
+    "/v1/log/proof": {
+      "get": {
+        "description": "Proves the leaf at `leaf_index` is in the tree of size `tree_size` (default: the current size), with its leaf hash and the root. A receipt already carries one; use this to prove it against a newer head. Free and public.",
+        "operationId": "log_proof_v1_log_proof_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "leaf_index",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "title": "Leaf Index",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "tree_size",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Tree Size"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Log Proof V1 Log Proof Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Invalid parameters."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "No such leaf in a tree of that size."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Rate limit exceeded."
+          }
+        },
+        "summary": "Get an inclusion proof"
+      }
+    },
     "/v1/receipts/{receipt_id}": {
       "get": {
-        "description": "A signed receipt with its inclusion proof in the log (and the anchor, once the log root is anchored). Receipts are meant to be shared and checked by anyone, so this needs no API key. Reads are rate-limited per API key when a valid key is sent, otherwise per IP address.",
+        "description": "A signed receipt with its inclusion proof in the log (and the anchor with its block, once the log root is anchored). Receipts are meant to be shared and checked by anyone, so this needs no API key. Reads are rate-limited per API key when a valid key is sent, otherwise per IP address.",
         "operationId": "receipt_v1_receipts__receipt_id__get",
         "parameters": [
           {
@@ -581,6 +959,62 @@
           }
         },
         "summary": "Get a receipt"
+      }
+    },
+    "/v1/whoami": {
+      "get": {
+        "description": "Says which workspace a credential belongs to, and what it may do: `kind` is `key` for an API key (full access, `scopes` is null) or `oauth` for a token from the sign-in flow (limited `scopes`, and the `audience` it was issued for). Any valid credential may ask. Servers that accept QED Proof credentials use this to check one.",
+        "operationId": "whoami_v1_whoami_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Whoami V1 Whoami Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Missing or invalid credential."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Rate limit exceeded."
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "summary": "Check a credential"
       }
     }
   },

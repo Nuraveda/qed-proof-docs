@@ -44,10 +44,9 @@ The **Connect apps** page in the [QED Proof app](https://qedproof.site/app/conne
 Claude Desktop, Cursor, VS Code, Windsurf, Gemini CLI, Codex CLI, Cline and Zed, with a key made for each app so you can
 revoke one without breaking the others.
 
-Two apps can't connect yet. **claude.ai** (web and mobile) and **ChatGPT** connect to a remote server with an OAuth
-sign-in, and QED Proof doesn't have one yet. ChatGPT has no field for an API key at all. claude.ai accepts a key only in
-organizations that are in Anthropic's request-headers beta. Until OAuth sign-in is added, use Claude Code, Claude Desktop
-or one of the editors above.
+**claude.ai** (web and mobile) and **ChatGPT** connect with a sign-in instead of a key. Add `https://mcp.qedproof.site/mcp`
+as a custom connector, choose the OAuth sign-in option, and approve the connection on QED Proof's page as an owner of the
+workspace. No key is copied. The **Connect apps** page lists the apps connected this way and lets an owner revoke one.
 
 ## What the tools do
 
