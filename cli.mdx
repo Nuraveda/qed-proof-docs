@@ -66,5 +66,15 @@ qed verify https://api.qedproof.site/v1/receipts/rcpt_01M3DK4CJD42ZC4HN3BBMKGTW2
   --rpc https://sepolia.base.org
 ```
 
+## Read the public log
+
+```bash
+qed log head --verify
+```
+
+prints the [log](/concepts/merkle-log)'s signed tree head (size, root, signing key, latest anchor) and checks its
+signature. No API key is needed. To check a receipt against a head you saved earlier, or with a consistency proof you
+already hold, use `qed verify <receipt> --head <file-or-url> [--consistency <file>] [--issuer <url>]`.
+
 See the [Python SDK](/sdks/python), [TypeScript SDK](/sdks/typescript), or [MCP server](/mcp-server) for application and agent
 integrations. The [`@qed-proof/cli` package](https://www.npmjs.com/package/@qed-proof/cli) includes the full command help.

@@ -63,5 +63,22 @@ anchor is not checked unless you also provide an RPC URL.
 `verifyReceipt` also verifies **change entries**, the log's record of a change nobody claimed (the report has
 `entry_kind: "change"` and no verdict). To check the `policy` on a receipt or change entry, pass the pipeline document:
 `verifyReceipt(receipt, { keys, pipeline })`. The report's `checks.policy` is then `true` or `false`, or `"not_checked"`
-when you give no document. See the [`@qed-proof/sdk` package](https://www.npmjs.com/package/@qed-proof/sdk)
+when you give no document.
+
+## Read the public log
+
+The [log](/concepts/merkle-log) is free and public, so these calls send no API key:
+
+```ts
+const head = await qed.logHead(); // signed tree head + latest anchor
+const report = verifyTreeHead(head, keys); // report.valid: the head's signature checks out
+const size = head.tree_head.body.tree_size;
+const proof = await qed.logConsistency(size - 5, size);
+```
+
+`logProof`, `logAnchors` and `logEntries` cover the rest of the public log API. When a receipt's proof and its anchor
+were made at different log sizes, verification now checks the consistency proof between them (fetched from the API by
+`qed.verify`) instead of reporting `consistency_proof_required`.
+
+See the [`@qed-proof/sdk` package](https://www.npmjs.com/package/@qed-proof/sdk)
 or the [HTTP API](/api-reference/introduction).

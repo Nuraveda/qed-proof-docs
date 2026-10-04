@@ -45,6 +45,7 @@
               "concepts/merkle-log",
               "concepts/anchoring",
               "concepts/trust-levels",
+              "concepts/reputation-score",
               "concepts/check-a-receipt"
             ]
           },

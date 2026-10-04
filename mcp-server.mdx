@@ -4,7 +4,7 @@ description: Connect QED Proof to an MCP client over local stdio or hosted Strea
 ---
 
 The `@qed-proof/mcp` package exposes QED Proof as tools to an MCP client. It requires Node.js 20 or later. The server
-offers `submit_claim`, `get_verdict`, `get_receipt`, `verify_receipt`, `list_claims`, and `list_connections`.
+offers `submit_claim`, `get_verdict`, `get_receipt`, `verify_receipt`, `list_claims`, `list_connections`, and `get_log_head`.
 
 ## Create a key
 
@@ -54,7 +54,8 @@ workspace. No key is copied. The **Connect apps** page lists the apps connected 
 `get_receipt` returns the public receipt. `verify_receipt` checks a receipt offline, including its signature and log
 inclusion. It also checks change entries (a change nobody claimed, recorded in the log), and with an optional `pipeline`
 document it checks the entry's `policy`. It does not check an on-chain anchor, so that check remains unproven. The list tools return the claims and
-connected destinations available to the workspace.
+connected destinations available to the workspace. `get_log_head` returns the [public log](/concepts/merkle-log)'s current signed
+tree head and latest anchor, and reports whether the head's signature verifies against QED Proof's published keys.
 
 Only actions with a published verifier profile can receive a verified outcome. Other actions can be submitted, but
 will be decided as `unverifiable`. See [verdicts](/concepts/verdicts) and [connectors](/connectors/overview) for

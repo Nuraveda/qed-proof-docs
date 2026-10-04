@@ -73,5 +73,21 @@ on-chain anchor is reported as not checked unless you install the `anchor` extra
 `verify_receipt(receipt, keys, pipeline=pipeline)`. The report's `policy` check is then `True` or `False`, or
 `"not_checked"` when you give no document.
 
+## Read the public log
+
+The [log](/concepts/merkle-log) is free and public, so these calls send no API key:
+
+```python
+head = client.log_head()               # signed tree head + latest anchor
+report = verify_tree_head(head, keys)  # report.valid: the head's signature checks out
+size = head.tree_head.tree_size
+proof = client.log_consistency(size - 5, size)
+```
+
+`log_proof`, `log_anchors` and `log_entries` cover the rest of the [public log API](/api-reference/introduction). When a
+receipt's proof and its anchor were made at different log sizes, `verify_receipt` (and `client.verify`) now checks the
+consistency proof between them instead of reporting `consistency_proof_required`. Pass `head=` to also check a receipt
+against a signed head you saved earlier.
+
 `AsyncQedProof` offers the same client operations for async applications. See the
 [`qed-proof` package reference](https://pypi.org/project/qed-proof/) or the [HTTP API](/api-reference/introduction).
